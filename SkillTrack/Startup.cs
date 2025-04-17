@@ -10,12 +10,10 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
-using StackExchange.Redis;
 using NSwag;
 using NSwag.AspNetCore;
 using NSwag.Generation.Processors;
 using SkillTrack.Core.Services;
-using SkillTrack.Core.Services.Redis; 
 
 namespace SkillTrack
 {
@@ -26,11 +24,7 @@ namespace SkillTrack
 
         public Startup(IConfiguration configuration)
         {
-            Configuration = configuration;
-            
-            // Определяем, использовать ли Redis
-            string redisConnectionString = Configuration.GetConnectionString("Redis");
-            UseRedis = !string.IsNullOrEmpty(redisConnectionString);
+            Configuration = configuration; 
         }   
 
         public void ConfigureServices(IServiceCollection services)
@@ -51,48 +45,6 @@ namespace SkillTrack
                     // Нечувствительность к регистру при десериализации
                     options.JsonSerializerOptions.PropertyNameCaseInsensitive = true;
                 });
-            
-            // Настраиваем Redis только если он доступен
-            if (UseRedis)
-            {
-                Console.WriteLine("Настройка Redis...");
-                try 
-                {
-                    var redisConnectionString = Configuration.GetConnectionString("Redis");
-                    services.AddSingleton<IConnectionMultiplexer>(sp =>
-                    {
-                        var options = ConfigurationOptions.Parse(redisConnectionString);
-                        options.ConnectTimeout = 10000; 
-                        options.SyncTimeout = 10000;
-                        options.AbortOnConnectFail = false; 
-                        return ConnectionMultiplexer.Connect(options);
-                    });
-                    services.AddScoped<IRedisService, RedisService>();
-                    services.AddScoped<RedisService>();
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine($"Ошибка настройки Redis: {ex.Message}");
-                    Console.WriteLine("Продолжаем без Redis...");
-                    UseRedis = false;
-                    services.AddSingleton<IRedisService, InMemoryRedisService>();
-                }
-            }
-            else
-            {
-                Console.WriteLine("Redis не настроен. Используем резервную службу в памяти.");
-                services.AddSingleton<IRedisService, InMemoryRedisService>();
-            }
-                
-            // services.AddSingleton<SupabaseClient>(serviceProvider =>
-            // {
-            //     var configuration = serviceProvider.GetRequiredService<IConfiguration>();
-            //     var supabaseConfig = configuration.GetSection("Supabase");
-
-            //     var supabaseClient = new SupabaseClient(); 
-
-            //     return supabaseClient;
-            // });
             
             services.AddAuthentication(options => 
             {
@@ -125,29 +77,29 @@ namespace SkillTrack
             services.AddMemoryCache();
             
                 // NSwag/OpenAPI configuration
-                services.AddOpenApiDocument(document =>
+            services.AddOpenApiDocument(document =>
+            {
+                document.Title = "MedExpo Auth Service API";
+                document.Version = "v1";
+                document.Description = "Authentication and authorization service for MedExpo platform";
+                
+                // Configure base path and API info
+                document.PostProcess = d =>
                 {
-                    document.Title = "MedExpo Auth Service API";
-                    document.Version = "v1";
-                    document.Description = "Authentication and authorization service for MedExpo platform";
-                    
-                    // Configure base path and API info
-                    document.PostProcess = d =>
+                    d.Servers.Add(new OpenApiServer { Url = "/" });
+                };
+                
+                // Ensure versioned paths
+                document.OperationProcessors.Add(new OperationProcessor(context =>
+                {
+                    var path = context.OperationDescription.Path;
+                    if (!path.Contains("/v1/"))
                     {
-                        d.Servers.Add(new OpenApiServer { Url = "/" });
-                    };
-                    
-                    // Ensure versioned paths
-                    document.OperationProcessors.Add(new OperationProcessor(context =>
-                    {
-                        var path = context.OperationDescription.Path;
-                        if (!path.Contains("/v1/"))
-                        {
-                            context.OperationDescription.Path = path.Replace("/api/", "/api/v1/");
-                        }
-                        return true;
-                    }));
-                });
+                        context.OperationDescription.Path = path.Replace("/api/", "/api/v1/");
+                    }
+                    return true;
+                }));
+            });
             
             services.AddCors(options =>
             {

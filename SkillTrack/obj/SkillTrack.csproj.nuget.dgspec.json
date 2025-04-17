@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Difficult\\Documents\\GitHub\\SkillTrack\\SkillTrack\\SkillTrack.csproj": {}
+    "C:\\Users\\user\\Documents\\GitHub\\SkillTrack\\SkillTrack\\SkillTrack.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Difficult\\Documents\\GitHub\\SkillTrack\\SkillTrack\\SkillTrack.csproj": {
+    "C:\\Users\\user\\Documents\\GitHub\\SkillTrack\\SkillTrack\\SkillTrack.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Difficult\\Documents\\GitHub\\SkillTrack\\SkillTrack\\SkillTrack.csproj",
+        "projectUniqueName": "C:\\Users\\user\\Documents\\GitHub\\SkillTrack\\SkillTrack\\SkillTrack.csproj",
         "projectName": "SkillTrack",
-        "projectPath": "C:\\Users\\Difficult\\Documents\\GitHub\\SkillTrack\\SkillTrack\\SkillTrack.csproj",
-        "packagesPath": "C:\\Users\\Difficult\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Difficult\\Documents\\GitHub\\SkillTrack\\SkillTrack\\obj\\",
+        "projectPath": "C:\\Users\\user\\Documents\\GitHub\\SkillTrack\\SkillTrack\\SkillTrack.csproj",
+        "packagesPath": "C:\\Users\\user\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\user\\Documents\\GitHub\\SkillTrack\\SkillTrack\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\Difficult\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "C:\\Users\\user\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net9.0"
@@ -38,15 +38,23 @@
           "auditLevel": "low",
           "auditMode": "direct"
         },
-        "SdkAnalysisLevel": "9.0.100"
+        "SdkAnalysisLevel": "9.0.200"
       },
       "frameworks": {
         "net9.0": {
           "targetAlias": "net9.0",
           "dependencies": {
+            "Microsoft.AspNetCore.Authentication.JwtBearer": {
+              "target": "Package",
+              "version": "[9.0.4, )"
+            },
             "Microsoft.AspNetCore.OpenApi": {
               "target": "Package",
               "version": "[9.0.1, )"
+            },
+            "NSwag.AspNetCore": {
+              "target": "Package",
+              "version": "[14.3.0, )"
             },
             "Supabase": {
               "target": "Package",
@@ -76,7 +84,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.102/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.200/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

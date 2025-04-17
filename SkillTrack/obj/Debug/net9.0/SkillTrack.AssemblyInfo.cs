@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("SkillTrack")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+8028200dd7d83e877fec4485fc92eb60581526e0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+d40f68087932f45e3f8b7a08dd79c5f506378f61")]
 [assembly: System.Reflection.AssemblyProductAttribute("SkillTrack")]
 [assembly: System.Reflection.AssemblyTitleAttribute("SkillTrack")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

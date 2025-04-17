@@ -24,7 +24,7 @@ namespace SkillTrack.Core.Services
                 throw; 
             }
         } 
-        public async Task<string> CreateUser(UserDTO _user)
+        public async Task<bool> CreateUser(UserDTO _user)
         { 
             try 
             { 
@@ -38,12 +38,14 @@ namespace SkillTrack.Core.Services
                 try 
                 { 
                     await client.From<User>().Insert(user); 
-                    return "Ok"; 
+                    return true; 
                 }
                 catch (Exception ex) 
                 { 
                     Console.WriteLine($"Error: {ex.Message}"); 
+                    
                     throw; 
+                     
                 }
             } 
             catch (Exception ex) 
@@ -52,13 +54,20 @@ namespace SkillTrack.Core.Services
                 throw; 
             }
         } 
-        public async Task<string> GetUser(int user_id)
+        public async Task<User?> GetUser(int user_id)
         { 
             try 
             { 
                 var client = await SupabaseClient(); 
-                var query = client.From<User>().Filter("Id", Supabase.Postgrest.Constants.Operator.Equals, user_id); 
-                return "Ok"; 
+                var query = client.From<User>().Where(u => u.Id == user_id).Select("Id, Username, Password, Tasks").Get(); 
+                var user = new User
+                { 
+                    Id = query.Id,
+                    Username = query.Username,
+                    Password = query.Password,
+                    Tasks = query.Tasks
+                }; 
+                return user; 
             }
             catch (Exception ex) 
             { 
@@ -66,7 +75,7 @@ namespace SkillTrack.Core.Services
                 throw; 
             }
         } 
-        public async Task<string> AddTask(UserTaskDTO userTaskDTO)
+        public async Task<bool> AddTask(UserTaskDTO userTaskDTO)
         { 
             try 
             { 
@@ -78,7 +87,7 @@ namespace SkillTrack.Core.Services
                     Task_Name = userTaskDTO.Task_Name
                 };  
                 await client.From<UserTask>().Insert(task); 
-                return "Ok"; 
+                return true; 
             }
             catch (Exception ex) 
             { 
